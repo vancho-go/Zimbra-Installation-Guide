@@ -95,15 +95,32 @@ dns-nameservers 8.8.8.8
 
 * sudo gedit /etc/dnsmasq.conf
 ```
-domain-needed  
-no-dhcp-interface=eth1  
-bogus-priv  
-expand-hosts  
-domain=zimbra.mail  
-local=/zimbra.mail/  
-no-resolv  
-server=8.8.8.8  
-mx-host=mail,zimbra.mail,10  
+# Never forward plain names (without a domain)
+domain-needed
+
+# Turn off DHCP on eth1
+no-dhcp-interface=eth1
+
+# Never forward addresses in the non-routable address space (RFC1918)
+bogus-priv
+
+# Add domain to host names
+expand-hosts
+
+# Domain to be added if expand-hosts is set
+domain=zimbra.mail
+
+# Local domain to be served from /etc/hosts file
+local=/zimbra.mail/
+
+# Don't read /etc/resolv.conf (I deleted it). Get the external name server from this file, see 'server' below
+no-resolv
+
+# External server, works with no-resolv
+server=8.8.8.8
+
+# For MX record
+mx-host=mail,zimbra.mail,10
 ```
 
 Дополняем hosts:
